@@ -19,8 +19,11 @@ Comments.init(
             },
         },
         comment_text: {
-            type: DataTypes.TEXT,
-            allowNull: false
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                len: [1]
+            }
         },
         blog_id: {
             type: DataTypes.INTEGER,
