@@ -1,12 +1,12 @@
 const router = require('express').Router();
 const sequelize = require('../config/connection');
-const { Post, User, Comment } = require('../models');
+const { Blogs, User, Comments } = require('../models');
 const withAuth = require('../utils/auth');
 
 // get /dashboard
 router.get('/', withAuth, (req, res) => {
   console.log("dashboard")
-    Post.findAll({
+    Blogs.findAll({
       where: {
         // use the ID from the session
         user_id: req.session.user_id
@@ -15,13 +15,12 @@ router.get('/', withAuth, (req, res) => {
         'id',
         'title',
         'created_at',
-        'post_content',
-        'image_url'
+        'date_created',
       ],
       include: [
         {
-          model: Comment,
-          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+          model: Comments,
+          attributes: ["id", "comment_text", "blog_id", "user_id", ],
           include: {
             model: User,
             attributes: ['username']
@@ -33,10 +32,10 @@ router.get('/', withAuth, (req, res) => {
         }
       ]
     })
-      .then(dbPostData => {
+      .then(dbBlogData => {
         // serialize data before passing to template
-        const posts = dbPostData.map(post => post.get({ plain: true }));
-        res.render('dashboard', { posts, loggedIn: true });
+        const blogs = dbBlogData.map(blog => blog.get({ plain: true }));
+        res.render('dashboard', { blogs, loggedIn: true });
       })
       .catch(err => {
         console.log(err);
@@ -46,21 +45,20 @@ router.get('/', withAuth, (req, res) => {
 
   //Routing for the editing of blog
   router.get('/edit/:id', withAuth, (req, res) => {
-    Post.findOne({
+    Blogs.findOne({
       where: {
         id: req.params.id
       },
       attributes: [
         'id',
         'title',
-        'created_at',
-        'post_content',
-        'image_url'
+        'date_created',
+        'body',
       ],
       include: [
         {
-          model: Comment,
-          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+          model: Comments,
+          attributes: ["id", "comment_text", "blog_id", "user_id", ],
           include: {
             model: User,
             attributes: ['username']
@@ -72,17 +70,17 @@ router.get('/', withAuth, (req, res) => {
         }
       ]
     })
-      .then(dbPostData => {
-        if (!dbPostData) {
-          res.status(404).json({ message: 'No post found with this id' });
+      .then(dbBlogData => {
+        if (!dbBlogData) {
+          res.status(404).json({ message: 'No blog found with this id' });
           return;
         }
   
         // serialize the data
-        const post = dbPostData.get({ plain: true });
+        const blog = dbBlogData.get({ plain: true });
 
-        res.render('edit-post', {
-            post,
+        res.render('edit-blog', {
+            blog,
             loggedIn: true
             });
       })
@@ -93,7 +91,7 @@ router.get('/', withAuth, (req, res) => {
 });
 
 router.get('/create/', withAuth, (req, res) => {
-    Post.findAll({
+    Blogs.findAll({
       where: {
         // use the ID from the session
         user_id: req.session.user_id
@@ -101,14 +99,14 @@ router.get('/create/', withAuth, (req, res) => {
       attributes: [
         'id',
         'title',
-        'created_at',
-        'post_content',
+        'date_created',
+        'body',
         'image_url'
       ],
       include: [
         {
-          model: Comment,
-          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+          model: Comments,
+          attributes: ["id", "comment_text", "blog_id", "user_id", ],
           include: {
             model: User,
             attributes: ['username']
@@ -122,8 +120,8 @@ router.get('/create/', withAuth, (req, res) => {
     })
       .then(dbPostData => {
         // serialize data before passing to template
-        const posts = dbPostData.map(post => post.get({ plain: true }));
-        res.render('create-post', { posts, loggedIn: true });
+        const blogs = dbPostData.map(blog => blog.get({ plain: true }));
+        res.render('create-blog', { blogs, loggedIn: true });
       })
       .catch(err => {
         console.log(err);

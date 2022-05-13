@@ -1,17 +1,17 @@
 const router = require("express").Router();
 const sequelize = require("../config/connection");
-const { Post, User, Comment } = require("../models");
+const { Blogs, User, Comments,  } = require("../models");
 
 //Here we 
 router.get("/", (req, res) => {
   console.log(req.session);
 
-  Post.findAll({
-    attributes: ["id", "title", "created_at", "post_content", "image_url"],
+  Blogs.findAll({
+    attributes: ["id", "title", "body", "user_id"],
     include: [
       {
-        model: Comment,
-        attributes: ["id", "comment_text", "post_id", "user_id", "created_at"],
+        model: Comments,
+        attributes: ["id", "comment_text", "blog_id", "user_id", ],
         include: {
           model: User,
           attributes: ["username"],
@@ -23,10 +23,10 @@ router.get("/", (req, res) => {
       },
     ],
   })
-    .then((dbPostData) => {
-      const posts = dbPostData.map((post) => post.get({ plain: true }));
+    .then((dbBlogsData) => {
+      const blogs = dbBlogsData.map((blog) => blog.get({ plain: true }));
       res.render("homepage", {
-        posts,
+        blogs,
         loggedIn: req.session.loggedIn,
       });
     })
@@ -55,15 +55,15 @@ router.get("/signup", (req, res) => {
 });
 
 router.get("/post/:id", (req, res) => {
-  Post.findOne({
+  Blogs.findOne({
     where: {
       id: req.params.id,
     },
-    attributes: ["id", "title", "created_at", "post_content", "image_url"],
+    attributes: ["id", "title", "body", "user_id"],
     include: [
       {
         model: Comment,
-        attributes: ["id", "comment_text", "post_id", "user_id", "created_at"],
+        attributes: ["id", "comment_text", "blog_id", "user_id", ],
         include: {
           model: User,
           attributes: ["username"],
@@ -75,18 +75,18 @@ router.get("/post/:id", (req, res) => {
       },
     ],
   })
-    .then((dbPostData) => {
-      if (!dbPostData) {
+    .then((dbBlogData) => {
+      if (!dbBlogData) {
         res.status(404).json({ message: "No post found with this id" });
         return;
       }
 
       // serialize the data
-      const post = dbPostData.get({ plain: true });
+      const blog = dbBlogData.get({ plain: true });
 
       // pass data to template
-      res.render("single-post", {
-        post,
+      res.render("single-blog", {
+        blog,
         loggedIn: req.session.loggedIn,
       });
     })
