@@ -2,31 +2,31 @@
 
 <article>
   <a href="/dashboard" class=""> back to dashboard</a>
-  <h2 class="title mt-5">edit post</h2><hr>
-  <form class="edit-post-form">
+  <h2 class="title mt-5">edit blog</h2><hr>
+  <form class="edit-blog-form">
     <div>
-        <label for="post-title">post title:</label>
-      <input class="input" name="post-title" type="text" value="{{post.title}}" />
+        <label for="blog-title">blog title:</label>
+      <input class="input" name="blog-title" type="text" value="{{blog.title}}" />
     </div>
      <div>
-        <img class="image" src="{{post.image_url}} ">
+        <img class="image" src="{{blog.image_url}} ">
     </div>
     <div>
-        <label for="post-content">post content:</label>
-      <input class="textarea" name="post-content" type="text" value="{{post.post_content}}" />
+        <label for="blog-content">blog content:</label>
+      <input class="textarea" name="blog-content" type="text" value="{{blog.blog_content}}" />
     </div>
     <div class="is-pulled-right">
-       created by you on {{format_date post.created_at}}
+       created by you on {{format_date blog.created_at}}
       |
-      <a href="/post/{{post.id}}">{{post.comments.length}} {{format_plural "comment" post.comments.length}}</a>
+      <a href="/blog/{{blog.id}}">{{blog.comments.length}} {{format_plural "comment" blog.comments.length}}</a>
     </div>
-    <button type="submit" class="button is-success">save post</button>
-    <button type="button" class="button is-danger delete-post-btn">delete post</button>
+    <button type="submit" class="button is-success">save blog</button>
+    <button type="button" class="button is-danger delete-blog-btn">delete blog</button>
   </form>
 </article>
 
-{{> comments post.comments}}
+{{> comments blog.comments}}
 
-<script src="/javascript/edit-post.js"></script>
-<script src="/javascript/delete-post.js"></script>
+<script src="/javascript/edit-blog.js"></script>
+<script src="/javascript/delete-blog.js"></script>
 <script src="/javascript/comment.js"></script>

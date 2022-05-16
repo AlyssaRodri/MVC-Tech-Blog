@@ -12,11 +12,12 @@
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
   {{!-- My StyleSheet --}}
+  <link rel="stylesheet" href="../../public/css/main.css" />
 
 </head>
 
 <header>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg">
     <a class="navbar-brand" href="#">Dashboard</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +27,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
         </li>
         {{#if loggedIn}}
 
@@ -40,9 +41,11 @@
           <button id="logout" class="button is-danger">Logout</button>
         </li>
         {{else}}
-        <li class="nav-item">
-          <button id="logout" class="button is-success" href="/login">Login</button>
-        </li>
+            <div class="nav-list">
+              <li class="nav-item nav-link">
+                <a href="/login" class="button is-success">Login</a>                
+              </li>
+            </div>
         {{/if}}
       </ul>
     </div>
@@ -56,6 +59,22 @@
 {{#if loggedIn}}
 <script src="../../public/javascript/logout.js" />
 {{/if}}
+
+<footer class="footer rows pb-2">
+    <div class="has-text-centered footer-div">
+        <p>
+          <a href="/">Homepage</a>
+          {{#if loggedIn}} | 
+            <a href="/dashboard/">Dashboard</a> | 
+            <a href="/dashboard/create/">Create New Post</a>
+          {{else}}
+          | <a href="/login/">Login</a>
+          {{/if}}
+        </p>
+    </div>
+    </div>
+  </footer>
+
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

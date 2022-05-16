@@ -1,18 +1,18 @@
 {{!-- File Taken from Group Project 2 --}}
 
 <div class="mb-5 pt-3">
-    <h2 class="title pb-4">My Posts<i class="fa fa-thin fa-seedling"></i></h2>
-    {{#if posts.length}}
+    <h2 class="title pb-4">My blogs<i class="fa fa-thin fa-seedling"></i></h2>
+    {{#if blogs.length}}
 </div>
 
-{{#each posts as |post|}}
+{{#each blogs as |blog|}}
     <div>
-        {{> post-info post}}
-        <a href="/dashboard/edit/{{post.id}}"><button class="button mb-5 ml-5 is-warning">edit post</button></a>
+        {{> blog-info blog}}
+        <a href="/dashboard/edit/{{blog.id}}"><button class="button mb-5 ml-5 is-warning">edit blog</button></a>
     </div>
 {{/each}}
 
 {{else}}
-<h6 class="pb-4 has-text-centered is-italic">you do not currently have any posts</h6>
+<h6 class="pb-4 has-text-centered is-italic">you do not currently have any blogs</h6>
 
 {{/if}}

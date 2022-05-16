@@ -1,0 +1,12 @@
+:root {
+    --drkbl: #0a0908;
+    --blue: #22333b;
+    --white: #eae0d5;
+    --tan: #c6ac8f;
+    --drkgry: #5e503f;
+}
+
+nav {
+    background-color: var(--tan);
+    border: 3px var(--blue);
+}
