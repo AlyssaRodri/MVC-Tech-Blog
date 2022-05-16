@@ -1,24 +1,24 @@
 const router = require('express').Router();
-const { Blogs, User, Comments } = require('../../models');
+const { Post, User, Comment } = require('../../models');
 const sequelize = require('../../config/connection');
 const withAuth = require('../../utils/auth');
 
 // get all users
 router.get('/', (req, res) => {
     console.log('======================');
-    Blogs.findAll({
+    Post.findAll({
         attributes: [
             'id',
             'title',
-            'date_created',
-            'body',
+            'created_at',
+            'post_content',
         ],
-      order: [['date_created', 'DESC']],
+      order: [['created_at', 'DESC']],
       include: [
         // Comment model here -- attached username to comment
         {
-          model: Comments,
-          attributes: ["id", "comment_text", "blog_id", "user_id", ],
+          model: Comment,
+          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
           include: {
             model: User,
             attributes: ['username']
@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
         },
       ]
     })
-      .then(dbBlogData => res.json(dbBlogData))
+      .then(dbPostData => res.json(dbPostData))
       .catch(err => {
         console.log(err);
         res.status(500).json(err);
@@ -47,7 +47,6 @@ router.get('/', (req, res) => {
         'title',
         'created_at',
         'post_content',
-        'image_url'
       ],
       include: [
         // include the Comment model here:
@@ -65,12 +64,12 @@ router.get('/', (req, res) => {
         }
       ]
     })
-      .then(dbBlogData => {
-        if (!dbBlogData) {
+      .then(dbPostData => {
+        if (!dbPostData) {
           res.status(404).json({ message: 'No post found with this id' });
           return;
         }
-        res.json(dbBlogData);
+        res.json(dbPostData);
       })
       .catch(err => {
         console.log(err);
@@ -82,10 +81,9 @@ router.post('/', withAuth, (req, res) => {
     Post.create({
       title: req.body.title,
       post_content: req.body.post_content,
-      image_url: req.body.image_url,
       user_id: req.session.user_id
     })
-      .then(dbBlogData => res.json(dbBlogData))
+      .then(dbPostData => res.json(dbPostData))
       .catch(err => {
         console.log(err);
         res.status(500).json(err);
@@ -96,19 +94,18 @@ router.put('/:id', withAuth, (req, res) => {
     Post.update({
         title: req.body.title,
         post_content: req.body.post_content,
-        image_url: req.body.image_url
       },
       {
         where: {
           id: req.params.id
         }
       })
-      .then(dbBlogData => {
-        if (!dbBlogData) {
+      .then(dbPostData => {
+        if (!dbPostData) {
           res.status(404).json({ message: 'No post found with this id' });
           return;
         }
-        res.json(dbBlogData);
+        res.json(dbPostData);
       })
       .catch(err => {
         console.log(err);
@@ -122,12 +119,12 @@ router.put('/:id', withAuth, (req, res) => {
         id: req.params.id
       }
     })
-      .then(dbBlogData => {
-        if (!dbBlogData) {
+      .then(dbPostData => {
+        if (!dbPostData) {
           res.status(404).json({ message: 'No post found with this id' });
           return;
         }
-        res.json(dbBlogData);
+        res.json(dbPostData);
       })
       .catch(err => {
         console.log(err);

@@ -1,12 +1,12 @@
 const router = require('express').Router();
 const sequelize = require('../config/connection');
-const { Blogs, User, Comments } = require('../models');
+const { Post, User, Comment } = require('../models');
 const withAuth = require('../utils/auth');
 
 // get /dashboard
 router.get('/', withAuth, (req, res) => {
   console.log("dashboard")
-    Blogs.findAll({
+    Post.findAll({
       where: {
         // use the ID from the session
         user_id: req.session.user_id
@@ -15,98 +15,12 @@ router.get('/', withAuth, (req, res) => {
         'id',
         'title',
         'created_at',
-        'date_created',
+        'post_content',
       ],
       include: [
         {
-          model: Comments,
-          attributes: ["id", "comment_text", "blog_id", "user_id", ],
-          include: {
-            model: User,
-            attributes: ['username']
-          }
-        },
-        {
-          model: User,
-          attributes: ['username']
-        }
-      ]
-    })
-      .then(dbBlogData => {
-        // serialize data before passing to template
-        const blogs = dbBlogData.map(blog => blog.get({ plain: true }));
-        res.render('dashboard', { blogs, loggedIn: true });
-      })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
-      });
-  });
-
-  //Routing for the editing of blog
-  router.get('/edit/:id', withAuth, (req, res) => {
-    Blogs.findOne({
-      where: {
-        id: req.params.id
-      },
-      attributes: [
-        'id',
-        'title',
-        'date_created',
-        'body',
-      ],
-      include: [
-        {
-          model: Comments,
-          attributes: ["id", "comment_text", "blog_id", "user_id", ],
-          include: {
-            model: User,
-            attributes: ['username']
-          }
-        },
-        {
-          model: User,
-          attributes: ['username']
-        }
-      ]
-    })
-      .then(dbBlogData => {
-        if (!dbBlogData) {
-          res.status(404).json({ message: 'No blog found with this id' });
-          return;
-        }
-  
-        // serialize the data
-        const blog = dbBlogData.get({ plain: true });
-
-        res.render('edit-blog', {
-            blog,
-            loggedIn: true
-            });
-      })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
-      });
-});
-
-router.get('/create/', withAuth, (req, res) => {
-    Blogs.findAll({
-      where: {
-        // use the ID from the session
-        user_id: req.session.user_id
-      },
-      attributes: [
-        'id',
-        'title',
-        'date_created',
-        'body',
-        'image_url'
-      ],
-      include: [
-        {
-          model: Comments,
-          attributes: ["id", "comment_text", "blog_id", "user_id", ],
+          model: Comment,
+          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
           include: {
             model: User,
             attributes: ['username']
@@ -120,8 +34,93 @@ router.get('/create/', withAuth, (req, res) => {
     })
       .then(dbPostData => {
         // serialize data before passing to template
-        const blogs = dbPostData.map(blog => blog.get({ plain: true }));
-        res.render('create-blog', { blogs, loggedIn: true });
+        const posts = dbPostData.map(post => post.get({ plain: true }));
+        res.render('dashboard', { posts, loggedIn: true });
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  });
+
+  //Routing for the editing of blog
+  router.get('/edit/:id', withAuth, (req, res) => {
+    Post.findOne({
+      where: {
+        id: req.params.id
+      },
+      attributes: [
+        'id',
+        'title',
+        'created_at',
+        'post_content',
+      ],
+      include: [
+        {
+          model: Comment,
+          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+          include: {
+            model: User,
+            attributes: ['username']
+          }
+        },
+        {
+          model: User,
+          attributes: ['username']
+        }
+      ]
+    })
+      .then(dbPostData => {
+        if (!dbPostData) {
+          res.status(404).json({ message: 'No post found with this id' });
+          return;
+        }
+  
+        // serialize the data
+        const post = dbPostData.get({ plain: true });
+
+        res.render('edit-post', {
+            post,
+            loggedIn: true
+            });
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+});
+
+router.get('/create/', withAuth, (req, res) => {
+    Post.findAll({
+      where: {
+        // use the ID from the session
+        user_id: req.session.user_id
+      },
+      attributes: [
+        'id',
+        'title',
+        'created_at',
+        'post_content',
+      ],
+      include: [
+        {
+          model: Comment,
+          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+          include: {
+            model: User,
+            attributes: ['username']
+          }
+        },
+        {
+          model: User,
+          attributes: ['username']
+        }
+      ]
+    })
+      .then(dbPostData => {
+        // serialize data before passing to template
+        const posts = dbPostData.map(post => post.get({ plain: true }));
+        res.render('create-post', { posts, loggedIn: true });
       })
       .catch(err => {
         console.log(err);

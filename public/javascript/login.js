@@ -1,5 +1,3 @@
-// File take from Group Project 2
-
 async function loginFormHandler(event) {
   event.preventDefault();
 

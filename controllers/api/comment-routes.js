@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const { Comments } = require('../../models');
+const { Comment } = require('../../models');
 const withAuth = require('../../utils/auth');
 
 // Fetch Request for Comments
 router.get('/', (req, res) => {
-    Comments.findAll({})
+    Comment.findAll({})
       .then(dbCommentData => res.json(dbCommentData))
       .catch(err => {
         console.log(err);
@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 router.post('/', withAuth, (req, res) => {
   // check the session
   if (req.session) {
-    Comments.create({
+    Comment.create({
       comment_text: req.body.comment_text,
       post_id: req.body.post_id,
       // use the id from the session

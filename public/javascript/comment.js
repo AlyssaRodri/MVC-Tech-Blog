@@ -1,4 +1,3 @@
-// File take from Group Project 2
 async function commentFormHandler(event) {
   event.preventDefault();
 
