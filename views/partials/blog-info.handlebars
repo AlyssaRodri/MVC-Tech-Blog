@@ -3,12 +3,12 @@
 <div class="card mb-6">
   <header class="card-header card-header-title ">
     
-        <div class="column" id="postCardHeader">
+        <div class="column" id="blogCardHeader">
             <p class=" has-text-primary-light"></p>
-      <a href="/post/{{id}}"  class="has-text-black is-capitalized is-pulled-left">{{title}} </a></p>
+      <a href="/blog/{{id}}"  class="has-text-black is-capitalized is-pulled-left">{{title}} </a></p>
       </div>
 
-      <div class="column" id="postCardHeader">
+      <div class="column" id="blogCardHeader">
       <span class=""> </span>
       </div>
     
@@ -19,11 +19,11 @@
              <img class="image" src="{{image_url}} ">
         </div>
         <div class="content has-text-justified">
-            {{post_content}}
+            {{blog_content}}
         </div>
             <div class="is-pulled-right">
                 <b>{{user.username}}</b> |    
-                 {{format_date created_at}} | <a href="/post/{{id}}">{{comments.length}} {{format_plural "comment" comments.length}}</a>
+                 {{format_date created_at}} | <a href="/blog/{{id}}">{{comments.length}} {{format_plural "comment" comments.length}}</a>
             </div>
         
     </div>

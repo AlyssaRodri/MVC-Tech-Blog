@@ -18,7 +18,7 @@
 
 <header>
   <nav class="navbar navbar-expand-lg">
-    <a class="navbar-brand" href="#">Dashboard</a>
+    <a class="navbar-brand" href="#">Alyssa's Tech Blog</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -61,19 +61,18 @@
 {{/if}}
 
 <footer class="footer rows pb-2">
-    <div class="has-text-centered footer-div">
-        <p>
-          <a href="/">Homepage</a>
-          {{#if loggedIn}} | 
-            <a href="/dashboard/">Dashboard</a> | 
-            <a href="/dashboard/create/">Create New Post</a>
-          {{else}}
-          | <a href="/login/">Login</a>
-          {{/if}}
-        </p>
-    </div>
-    </div>
-  </footer>
+  <div class="has-text-centered footer-div">
+      <p>
+        <a href="/">Homepage</a>
+        {{#if loggedIn}} | 
+          <a href="/dashboard/">Dashboard</a> | 
+          <a href="/dashboard/create/">Create New Post</a>
+        {{else}}
+        | <a href="/login/">Login</a>
+        {{/if}}
+      </p>
+  </div>
+</footer>
 
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
